@@ -29,9 +29,16 @@ document.addEventListener('click', function(event) {
     if (isFeatureEnabled) {
         const selectedDom = event.target.outerHTML;
         const currentUrl = window.location.href;
+
+        const category = prompt("请输入类别信息：");
+        if (category === null) {
+            return; // 用户取消输入
+        }
+
         const data = {
             peer: selectedDom,
-            domain: currentUrl
+            domain: currentUrl,
+            category: category
         };
 
         chrome.runtime.sendMessage({action: 'submitData', data: data}, (response) => {
