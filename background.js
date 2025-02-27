@@ -46,5 +46,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then(data => sendResponse({status: 'Success', data: data}))
       .catch(error => sendResponse({status: 'Error', error: error}));
     return true; // Keep the message channel open for sendResponse
+  } else if (request.action === 'getCategories') {
+    fetch('http://1.14.96.238/peer/peertypes')
+      .then(response => response.json())
+      .then(categories => sendResponse({status: 'Success', categories: categories}))
+      .catch(error => sendResponse({status: 'Error', error: error}));
+    return true; // Keep the message channel open for sendResponse
   }
 });
