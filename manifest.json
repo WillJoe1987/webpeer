@@ -1,15 +1,19 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Bookmark Manager",
   "version": "1.0",
   "description": "A simple bookmark manager for Chrome.",
   "icons": {
-		"48": "./img/48.png"
-	},
+    "48": "./img/48.png"
+  },
   "permissions": [
     "bookmarks",
     "tabs",
-		"activeTab"
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://1.14.96.238/*"
   ],
   "content_scripts": [
     {
@@ -17,7 +21,7 @@
       "js": ["contentScript.js"]
     }
   ],
-	"commands": {
+  "commands": {
     "add_bookmark": {
       "suggested_key": {
         "default": "Ctrl+Shift+B",
@@ -26,14 +30,13 @@
       "description": "Add current page as bookmark"
     }
   },
-  "browser_action": {
+  "action": {
     "default_icon": {
       "48": "./img/48.png"
     },
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js"
   }
 }

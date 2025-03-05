@@ -1,11 +1,18 @@
 let isFeatureEnabled = false;
 
+chrome.storage.sync.get(['isFeatureEnabled'], function(result) {
+    if (result.isFeatureEnabled !== undefined) {
+        isFeatureEnabled = result.isFeatureEnabled;
+    }
+});
+
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.action === "getPageContent") {
             sendResponse({content: document.documentElement.innerHTML});
         } else if (request.action === "toggleFeature") {
             isFeatureEnabled = request.enabled;
+            chrome.storage.sync.set({isFeatureEnabled: isFeatureEnabled});
             sendResponse({status: "Feature toggled", enabled: isFeatureEnabled});
         } else if (request.action === "getFeatureStatus") {
             sendResponse({enabled: isFeatureEnabled});
@@ -79,6 +86,7 @@ document.addEventListener('click', function(event) {
 
                         chrome.runtime.sendMessage({action: 'submitData', data: data}, (response) => {
                             isFeatureEnabled = true;
+                            chrome.storage.sync.set({isFeatureEnabled: isFeatureEnabled});
                             if (response.status === 'Success') {
                                 console.log('Success:', response.data);
                             } else {
@@ -94,12 +102,14 @@ document.addEventListener('click', function(event) {
                 buttoncancel.onclick = function() {
                     document.body.removeChild(dialog);
                     isFeatureEnabled = true;
+                    chrome.storage.sync.set({isFeatureEnabled: isFeatureEnabled});
                 };
                 dialog.appendChild(buttoncancel);
 
                 document.body.appendChild(dialog);
             } else {
                 isFeatureEnabled = true;
+                chrome.storage.sync.set({isFeatureEnabled: isFeatureEnabled});
                 console.error('Error fetching categories:', response.error);
             }
         });

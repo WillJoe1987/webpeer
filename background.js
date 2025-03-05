@@ -13,11 +13,11 @@ function addCurrentTabAsBookmark() {
     const title = tab.title;
     chrome.bookmarks.create({ title, url }, () => {
       // Show the popup to allow the user to edit the bookmark title
-      chrome.browserAction.setPopup({ popup: 'popup.html' });
-      chrome.browserAction.openPopup();
+      chrome.action.setPopup({ popup: 'popup.html' });
+      chrome.action.openPopup();
       // Reset the popup to its default state after it's been opened
       setTimeout(() => {
-        chrome.browserAction.setPopup({ popup: '' });
+        chrome.action.setPopup({ popup: '' });
       }, 100);
     });
   });
